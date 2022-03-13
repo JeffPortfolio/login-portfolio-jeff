@@ -1,0 +1,14 @@
+{
+    "exclude": [
+        "**/*.test.ts"
+    ],
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "commonjs",
+        "outDir": "./build",
+        "strict": true,
+        "noImplicitAny": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true
+    }
+}
