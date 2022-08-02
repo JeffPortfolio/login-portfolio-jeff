@@ -1,12 +1,13 @@
 export default function buildMakeUser({ nanoid, hashPassword }: { nanoid: any; hashPassword: any }) {
-    return function makeUser({ id, email, password }: { id?: string; email: string; password: string }) {
+    return function makeUser({ id, email, password, user }: { id?: string; email: string; password: string; user: string }) {
         const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
         const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
         const emailValid = EMAIL_REGEX.test(email);
 
-        if (!email || !emailValid) {
-            throw new Error('Must have valid Email.');
+        console.log(`email: ${email}  userName: ${user}`);
+        if (!email || !emailValid || !user) {
+            throw new Error('Must have valid Email and UserName.');
         }
 
         if (!password) {
@@ -25,6 +26,7 @@ export default function buildMakeUser({ nanoid, hashPassword }: { nanoid: any; h
         return Object.freeze({
             getId: () => id,
             getEmail: () => email,
+            getUser: () => user,
             getPassword: () => hashedPassword
         });
     };

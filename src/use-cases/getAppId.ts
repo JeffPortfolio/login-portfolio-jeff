@@ -1,10 +1,10 @@
 export default function makeGetAppById({ applicationDb }: { applicationDb: any }) {
-    return async function getAppById({ id }: { id: any }) {
-        if (!id) {
-            throw new Error('You must supply the user-id');
+    return async function getAppById({ appId }: { appId: any }) {
+        if (!appId) {
+            throw new Error('You must supply the id');
         }
 
-        const app = await applicationDb.findById(id);
+        const app = await applicationDb.findById(appId);
         return app;
     };
 }

@@ -9,11 +9,11 @@ export default function makeAddApp({ applicationDb }: { applicationDb: any }) {
         }
 
         const success = applicationDb.insert({
-            _id: applicationDb.getId(),
-            appName: applicationDb.getAppName(),
-            description: applicationDb.getDescription(),
-            owner: applicationDb.getOwner(),
-            appKey: applicationDb.getAppKey()
+            _id: newApp.getId(),
+            appName: newApp.getAppName(),
+            description: newApp.getDescription(),
+            owner: newApp.getOwner(),
+            appKey: newApp.getAppKey()
         });
 
         if (success) {

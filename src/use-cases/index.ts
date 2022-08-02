@@ -16,6 +16,10 @@ import makeGetRoleById from './getRoleById';
 import makeGetRoleAssignById from './getRoleAssignById';
 import makeGetRefreshById from './getRefreshId';
 import makeGetCurrentRefresh from './getCurrentRefresh';
+import makeGetAppList from './getAppList';
+import makeGetUserList from './getUserList';
+import makeGetUser from './getUser';
+import makeGetRefreshByUser from './getRefreshByUser';
 
 const addUser = makeAddUser({ userDb });
 const addApp = makeAddApp({ applicationDb });
@@ -32,6 +36,12 @@ const getCurrentRefresh = makeGetCurrentRefresh({ refreshDb });
 const getRefreshById = makeGetRefreshById({ refreshDb });
 const getRoleAssignById = makeGetRoleAssignById({ assignRoleDb });
 
+const getAppList = makeGetAppList({ applicationDb });
+const getUserList = makeGetUserList({ userDb });
+
+const getUser = makeGetUser({ userDb });
+const getRefreshByUser = makeGetRefreshByUser({ refreshDb });
+
 const usersService = Object.freeze({
     addUser,
     addApp,
@@ -45,8 +55,30 @@ const usersService = Object.freeze({
     getCurrentRefresh,
     getRefreshById,
     addRoleAssign,
-    getRoleAssignById
+    getRoleAssignById,
+    getAppList,
+    getUserList,
+    getUser,
+    getRefreshByUser
 });
 
 export default usersService;
-export { addUser, addApp, addRefresh, addRole, getUserByEmail, getUserById, getRoleById, getAppById, getAppByName, getCurrentRefresh, getRefreshById, addRoleAssign, getRoleAssignById };
+export {
+    addUser,
+    addApp,
+    addRefresh,
+    addRole,
+    getUserByEmail,
+    getUserById,
+    getRoleById,
+    getAppById,
+    getAppByName,
+    getCurrentRefresh,
+    getRefreshById,
+    addRoleAssign,
+    getRoleAssignById,
+    getAppList,
+    getUserList,
+    getUser,
+    getRefreshByUser
+};

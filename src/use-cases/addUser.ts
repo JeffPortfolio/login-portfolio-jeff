@@ -7,11 +7,16 @@ export default function makeAddUser({ userDb }: { userDb: any }) {
         if (emailExists) {
             return { status: 'error', message: 'Email already exists.' };
         }
+        const userExists = await userDb.findByName(newUser.getUser());
+        if (userExists) {
+            return { status: 'error', message: 'UserName already exists.' };
+        }
 
         const success = userDb.insert({
             _id: newUser.getId(),
             email: newUser.getEmail(),
-            passwordHash: newUser.getPassword()
+            passwordHash: newUser.getPassword(),
+            userName: newUser.getUser()
         });
 
         if (success) {
