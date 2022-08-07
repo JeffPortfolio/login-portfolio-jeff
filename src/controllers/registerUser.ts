@@ -65,7 +65,6 @@ export default function makeRegisterUser(addUser: any, addRefresh: any, getAppBy
                 {
                     aud: existingToken._id,
                     sub: existingToken.userId,
-                    refresh: existingToken.hash
                 },
                 process.env.JWT_REFRESH_SECRET as string
             );

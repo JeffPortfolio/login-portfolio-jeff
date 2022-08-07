@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export default function makeRefreshToken({ getRefreshById, getUserById, getAppByName }: { getRefreshById: any; getUserById: any, getAppByName: any }) {
@@ -21,9 +22,14 @@ export default function makeRefreshToken({ getRefreshById, getUserById, getAppBy
 
             const token = await getRefreshById(payload['aud']);
 
-            if (token._id !== payload['aud'] || token.hash !== payload['refresh']) {
+            let expString = token.expiration.getTime().toString();
+            let testRefresh = `${token._id}\\O/${expString}`
+            const refreshCheck = await bcrypt.compare(testRefresh, token.hash);
+
+            if (token._id !== payload['aud'] || !refreshCheck) {
                 return { statusCode: 200, body: 'No Refresh Token' };
             }
+
 
             let tokenUser = await getUserById(token.userId);
 

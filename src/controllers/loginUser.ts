@@ -50,7 +50,6 @@ export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRe
                 {
                     aud: existingToken._id,
                     sub: existingToken.userId,
-                    refresh: existingToken.hash
                 },
                 process.env.JWT_REFRESH_SECRET as string
             );

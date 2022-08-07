@@ -19,17 +19,14 @@ export default function makeRefreshDb({ makeDb }: { makeDb: any }) {
     }
 
     async function findById(id: string) {
-        // console.log(userId)
         const db = await makeDb();
         const query = { _id: id, expired: false };
-        console.log(query);
         const result = await db.collection('refresh').find(query).toArray();
 
         return result[0];
     }
 
     async function expireByUser(currUserId: string) {
-        console.log(`currUserId: ${currUserId}`);
         const db = await makeDb();
         const result = await db.collection('refresh').updateMany({ userId: currUserId }, { $set: { expired: true } });
 

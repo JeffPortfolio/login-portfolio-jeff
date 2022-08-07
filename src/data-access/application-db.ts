@@ -7,7 +7,6 @@ export default function makeAppDb({ makeDb }: { makeDb: any }) {
     });
 
     async function findByName(appName: string) {
-        console.log(appName);
         const db = await makeDb();
         const result = await db.collection('applications').find(appName).toArray();
 
