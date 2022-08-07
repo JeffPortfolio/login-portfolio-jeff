@@ -38,7 +38,6 @@ export default function makeCallback(controller: any) {
             user: httpResponse.user,
             roles: httpResponse.roles,
             body: httpResponse.body,
-            headers: httpResponse.headers,
             statusCode: httpResponse.statusCode
         };
         console.log(returnResponse);

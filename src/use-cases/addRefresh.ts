@@ -4,6 +4,8 @@ export default function makeAddRefresh({ refreshDb }: { refreshDb: any }) {
     return async function addRefresh(refreshInfo: any) {
         const newRefresh = makeRefreshToken(refreshInfo);
 
+        console.log(refreshInfo);
+        console.log(newRefresh);
         const success = refreshDb.insert({
             _id: newRefresh.getId(),
             userId: newRefresh.getUserId(),

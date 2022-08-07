@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
 
-export default function makeRefreshToken({ getRefreshById, getUserById }: { getRefreshById: any; getUserById: any }) {
+export default function makeRefreshToken({ getRefreshById, getUserById, getAppByName }: { getRefreshById: any; getUserById: any, getAppByName: any }) {
     return async function refreshToken(httpRequest: any) {
+        let roles = [1971]
         try {
             const headers = {
                 'Content-Type': 'application/json'
             };
 
-            // const { projName } = httpRequest.body;
-            // if (!projName) return { statusCode: 400, body: false };
+            const { appName } = httpRequest.body;
+            if (!appName) return { statusCode: 400, body: false };
 
             const refreshToken = httpRequest.refreshToken;
             if (!refreshToken) return { statusCode: 200, body: 'No Refresh Token' };
@@ -18,22 +19,25 @@ export default function makeRefreshToken({ getRefreshById, getUserById }: { getR
             const parts = refreshToken.split('.');
             const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
 
-            const token = await getRefreshById(payload['id']);
+            const token = await getRefreshById(payload['aud']);
 
-            if (token._id !== payload['id'] || token.hash !== payload['refresh']) {
+            if (token._id !== payload['aud'] || token.hash !== payload['refresh']) {
                 return { statusCode: 200, body: 'No Refresh Token' };
             }
 
-            // console.log(token.userId);
             let tokenUser = await getUserById(token.userId);
-            console.log(tokenUser);
+
+            const app = await getAppByName({ appName });
+            if (!app) return { statusCode: 401, body: 'Application is not in Universe.' };
 
             const accessToken = jwt.sign(
                 {
-                    aud: tokenUser._id,
-                    user: tokenUser.email
+                    aud: app._id,
+                    sub: tokenUser._id,
+                    user: tokenUser.userName,
+                    roles: roles
                 },
-                process.env.JWT_APP_SECRET as string
+                app.appKey
             );
 
             // let newToken = null;
@@ -57,9 +61,6 @@ export default function makeRefreshToken({ getRefreshById, getUserById }: { getR
             //     newTokenExpire = existingToken.expiration;
             // }
 
-            // // console.log(process.env.JWT_SECRET)
-
-            console.log(`user = ${tokenUser.userName}`);
             return {
                 statusCode: 200,
                 body: 'Success',
@@ -69,7 +70,6 @@ export default function makeRefreshToken({ getRefreshById, getUserById }: { getR
                 // refreshExpire: newTokenExpire
                 roles: [1971],
                 user: tokenUser.userName
-                // userCode: userCode
             };
         } catch (e) {
             console.log(e);

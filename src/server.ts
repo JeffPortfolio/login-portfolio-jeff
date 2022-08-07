@@ -25,7 +25,7 @@ app.use(
 app.post('/api/registerUser', makeCallback(registerUser));
 app.post('/api/login', makeCallback(loginUser));
 app.get('/api/logout', makeCallback(logoutUser));
-app.get('/api/refreshToken', makeCallback(refreshToken));
+app.post('/api/refreshToken', makeCallback(refreshToken));
 
 // Application APIs
 app.get('/api/loggedIn', makeCallback(userLoggedIn));

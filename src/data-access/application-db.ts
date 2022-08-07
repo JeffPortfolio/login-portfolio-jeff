@@ -7,9 +7,9 @@ export default function makeAppDb({ makeDb }: { makeDb: any }) {
     });
 
     async function findByName(appName: string) {
+        console.log(appName);
         const db = await makeDb();
-        const query = { appName };
-        const result = await db.collection('applications').find(query).toArray();
+        const result = await db.collection('applications').find(appName).toArray();
 
         return result[0];
     }
@@ -17,7 +17,7 @@ export default function makeAppDb({ makeDb }: { makeDb: any }) {
     async function findById(id: string) {
         // console.log(userId)
         const db = await makeDb();
-        const query = { _id: { $eq: id } };
+        const query = { _id: id };
         const result = await db.collection('applications').find(query).toArray();
 
         return result[0];

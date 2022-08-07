@@ -1,23 +1,29 @@
 import jwt from 'jsonwebtoken';
 
-export default function makeRegisterUser(addUser: any, addRefresh: any) {
+export default function makeRegisterUser(addUser: any, addRefresh: any, getAppByName: any) {
     return async function registerUser(httpRequest: any) {
         const headers = {
             'Content-Type': 'application/json'
         };
+        let roles = [1971]
         try {
-            const { email, password, passwordVerify, user }: { email: string; password: string; passwordVerify: string; user: string } = httpRequest.body;
+            const { email, password, passwordVerify, user, appName }: { email: string; password: string; passwordVerify: string; user: string, appName: string } = httpRequest.body;
 
-            if (!email || !password || !passwordVerify || !user) return { headers, statusCode: 400, body: 'Please enter all required fields.' };
+            if (!email || !password || !passwordVerify || !user ||!appName) return { headers, statusCode: 400, body: 'Please enter all required fields.' };
 
             const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
             const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+            const USER_REGEX = /^(?=.{5,30})[A-z][a-z0-9]*$/;
 
             const emailValid = EMAIL_REGEX.test(email);
 
             if (!emailValid) {
                 throw new Error('Must have valid Email.');
             }
+
+            const userValid = USER_REGEX.test(user)
+            console.log(userValid)
+            if (!userValid) throw new Error('UserName must be 5-30 characters and not start with a number.');
 
             const passStrong = PWD_REGEX.test(password);
             if (!passStrong) {
@@ -32,19 +38,23 @@ export default function makeRegisterUser(addUser: any, addRefresh: any) {
                 user
             });
 
-            console.log(result);
-
             if (result.status === 'error') {
                 return { headers, statusCode: 400, body: result.message };
             }
 
+            const app = await getAppByName({ appName });
+            if (!app) return { statusCode: 401, body: 'Application is not in Universe.' };
+
+            console.log(app)
+
             const accessToken = jwt.sign(
                 {
-                    // aud: existingApp._id,
-                    // appName: existingApp.appName,
-                    sub: result.data
+                    aud: app._id,
+                    sub: result.data,
+                    user: user,
+                    roles: roles
                 },
-                process.env.JWT_APP_SECRET as string
+                app.appKey
             );
 
             let newToken = await addRefresh({ userId: result.data });
@@ -53,7 +63,7 @@ export default function makeRegisterUser(addUser: any, addRefresh: any) {
             console.log(existingToken);
             const refreshToken = jwt.sign(
                 {
-                    id: existingToken._id,
+                    aud: existingToken._id,
                     sub: existingToken.userId,
                     refresh: existingToken.hash
                 },
@@ -67,8 +77,8 @@ export default function makeRegisterUser(addUser: any, addRefresh: any) {
                 refreshToken: refreshToken,
                 accessExpire: new Date(Date.now() + 9000),
                 refreshExpire: existingToken.expiration,
-                // roles: roles,
-                user: email,
+                roles: roles,
+                user: user,
                 userCode: new Date(Date.now() + 900000).getTime()
             };
         } catch (e) {

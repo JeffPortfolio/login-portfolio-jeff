@@ -6,7 +6,7 @@ import makeLoginUser from './loginUser';
 // import makeRegisterRole from './register-role';
 // import makeRefreshToken from './refresh-token';
 // import makeUserLoggedIn from './user-logged-in';
-import { addApp, getAppByName, getAppList, addUser, getAppById, getUserList, getUser, addRefresh, getRefreshById, getRefreshByUser, getUserById } from '../use-cases';
+import { addApp, getAppByName, getAppList, addUser, getAppById, getUserList, getUser, addRefresh, getRefreshById, getRefreshByUser, getUserById, expireRefreshById } from '../use-cases';
 import makeRegisterApplication from './registerApplication';
 import makeAllApplications from './listApplications';
 import makeRegisterUser from './registerUser';
@@ -17,16 +17,16 @@ import makeLogoutUser from './logoutUser';
 
 const registerApplication = makeRegisterApplication({ addApp, getAppByName });
 const allApplications = makeAllApplications({ getAppList });
-const registerUser = makeRegisterUser(addUser, addRefresh);
+const registerUser = makeRegisterUser(addUser, addRefresh, getAppByName);
 const userLoggedIn = makeUserLoggedIn();
 const allUsers = makeAllUsers({ getUserList });
 // const registerProject = makeRegisterProject({ addProject });
-const loginUser = makeLoginUser(getUser, getRefreshByUser);
+const loginUser = makeLoginUser(getUser, getRefreshByUser, addRefresh, expireRefreshById, getAppByName);
 const logoutUser = makeLogoutUser();
 // const logoutUser = makeLogoutUser();
 // const registerRole = makeRegisterRole({ getUser, getProject, addRole });
 // const refreshToken = makeRefreshToken({ getProject, getRole, getRefreshById, addRefresh });
-const refreshToken = makeRefreshToken({ getRefreshById, getUserById });
+const refreshToken = makeRefreshToken({ getRefreshById, getUserById, getAppByName });
 // const userLoggedIn = makeUserLoggedIn();
 
 const userController = Object.freeze({

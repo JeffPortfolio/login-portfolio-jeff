@@ -20,6 +20,8 @@ import makeGetAppList from './getAppList';
 import makeGetUserList from './getUserList';
 import makeGetUser from './getUser';
 import makeGetRefreshByUser from './getRefreshByUser';
+import makeExpireRefreshByUser from './expireRefreshByUser';
+import makeExpireRefreshById from './expireRefreshById';
 
 const addUser = makeAddUser({ userDb });
 const addApp = makeAddApp({ applicationDb });
@@ -41,6 +43,8 @@ const getUserList = makeGetUserList({ userDb });
 
 const getUser = makeGetUser({ userDb });
 const getRefreshByUser = makeGetRefreshByUser({ refreshDb });
+const expireRefreshByUser = makeExpireRefreshByUser({ refreshDb });
+const expireRefreshById = makeExpireRefreshById({ refreshDb });
 
 const usersService = Object.freeze({
     addUser,
@@ -59,7 +63,9 @@ const usersService = Object.freeze({
     getAppList,
     getUserList,
     getUser,
-    getRefreshByUser
+    getRefreshByUser,
+    expireRefreshByUser,
+    expireRefreshById
 });
 
 export default usersService;
@@ -80,5 +86,7 @@ export {
     getAppList,
     getUserList,
     getUser,
-    getRefreshByUser
+    getRefreshByUser,
+    expireRefreshByUser,
+    expireRefreshById
 };

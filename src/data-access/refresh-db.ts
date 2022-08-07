@@ -1,21 +1,27 @@
+import { ObjectId } from "mongodb";
+
 export default function makeRefreshDb({ makeDb }: { makeDb: any }) {
     return Object.freeze({
         findByUser,
         findById,
         expireByUser,
+        expireById,
         insert
     });
 
     async function findByUser(userId: string) {
         const db = await makeDb();
-        const result = await db.collection('refresh').find(userId).toArray();
+        const result = await db
+            .collection('refresh')
+            .find({$and: [{expired:false}, {userId}]})
+            .toArray();
         return result[0];
     }
 
     async function findById(id: string) {
         // console.log(userId)
         const db = await makeDb();
-        const query = { _id: id };
+        const query = { _id: id, expired: false };
         console.log(query);
         const result = await db.collection('refresh').find(query).toArray();
 
@@ -23,8 +29,16 @@ export default function makeRefreshDb({ makeDb }: { makeDb: any }) {
     }
 
     async function expireByUser(currUserId: string) {
+        console.log(`currUserId: ${currUserId}`);
         const db = await makeDb();
-        const result = await db.collection('refresh').updateMany({ userId: { $eq: currUserId } }, { $set: { expired: true } });
+        const result = await db.collection('refresh').updateMany({ userId: currUserId }, { $set: { expired: true } });
+
+        return result;
+    }
+
+    async function expireById(id: string) {
+        const db = await makeDb();
+        const result = await db.collection('refresh').updateOne({ _id: id }, { $set: { expired: true } });
 
         return result;
     }
