@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+// import { getRolesByAppId, getRoleAssignsByUserRoleId } from '../use-cases';
 
-export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRefresh: any, expireRefreshById: any, getAppByName: any) {
+export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRefresh: any, expireRefreshById: any, getAppByName: any, getRolesByAppId: any, getRoleAssignsByUserRoleId: any) {
     return async function loginUser(httpRequest: any) {
         const headers = {
             'Content-Type': 'application/json'
@@ -21,24 +22,38 @@ export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRe
             const passwordCorrect = await bcrypt.compare(password, existingUser.passwordHash);
             if (!passwordCorrect) return { statusCode: 401, body: 'Wrong username or password.' };
 
+            const rolesForApp = await getRolesByAppId(app.appId);
+            if (rolesForApp != undefined && rolesForApp.length > 0) {
+                let rolesList: any[] = [];
+                rolesForApp.forEach((role: any) => {
+                    rolesList.push(role.roleId);
+                });
+                let userRoles = await getRoleAssignsByUserRoleId(existingUser.userId, rolesList);
+                if (userRoles != undefined && userRoles.length > 0) {
+                    userRoles.forEach((role: any) => {
+                        roles.push(role.roleId);
+                    });
+                }
+            }
+
             const accessToken = jwt.sign(
                 {
-                    aud: app._id,
-                    sub: existingUser._id,
+                    aud: app.appid,
+                    sub: existingUser.userid,
                     user: existingUser.userName,
                     roles: roles
                 },
                 app.appKey
             );
 
-            let existingToken = await getRefreshByUser( existingUser._id );
+            let existingToken = await getRefreshByUser(existingUser.userId);
             if (existingToken && existingToken.expiration < new Date()) {
                 await expireRefreshById(existingToken._id);
                 existingToken = null;
             }
 
             if (!existingToken) {
-                let newToken = await addRefresh({ userId: existingUser._id });
+                let newToken = await addRefresh({ userId: existingUser.userId });
                 existingToken = newToken.token;
             }
 
@@ -48,20 +63,20 @@ export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRe
 
             const refreshToken = jwt.sign(
                 {
-                    aud: existingToken._id,
-                    sub: existingToken.userId,
+                    aud: existingToken.refreshId,
+                    sub: existingToken.userId
                 },
                 process.env.JWT_REFRESH_SECRET as string
             );
 
             return {
                 statusCode: 200,
-                body: "User Logged In Successful",
+                body: 'User Logged In Successful',
                 accessToken: accessToken,
                 accessExpire: new Date(Date.now() + 19000),
                 refreshToken: refreshToken,
                 refreshExpire: existingToken.expiration,
-                roles: [1971],
+                roles: roles,
                 user: existingUser.userName
             };
         } catch (e) {
@@ -69,7 +84,7 @@ export default function makeLoginUser(getUser: any, getRefreshByUser: any, addRe
             return {
                 statusCode: 400,
                 body: {
-                    error: 'Error Logining in User'
+                    error: 'Error Logging in User'
                 }
             };
         }

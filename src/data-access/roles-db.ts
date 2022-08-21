@@ -16,10 +16,10 @@ export default function makeRolesDb({ makeDb }: { makeDb: any }) {
 
     async function findByAppId(appId: string) {
         const db = await makeDb();
-        const query = { appId };
-        const result = await db.collection('roles').find(query).toArray();
+        // const query = { appId };
+        const result = await db.collection('roles').find(appId).toArray();
 
-        return result[0];
+        return result;
     }
 
     async function insert(newRoles: string) {

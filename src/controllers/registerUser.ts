@@ -5,11 +5,11 @@ export default function makeRegisterUser(addUser: any, addRefresh: any, getAppBy
         const headers = {
             'Content-Type': 'application/json'
         };
-        let roles = [1971]
+        let roles = [1971];
         try {
-            const { email, password, passwordVerify, user, appName }: { email: string; password: string; passwordVerify: string; user: string, appName: string } = httpRequest.body;
+            const { email, password, passwordVerify, user, appName }: { email: string; password: string; passwordVerify: string; user: string; appName: string } = httpRequest.body;
 
-            if (!email || !password || !passwordVerify || !user ||!appName) return { headers, statusCode: 400, body: 'Please enter all required fields.' };
+            if (!email || !password || !passwordVerify || !user || !appName) return { headers, statusCode: 400, body: 'Please enter all required fields.' };
 
             const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
             const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -21,8 +21,7 @@ export default function makeRegisterUser(addUser: any, addRefresh: any, getAppBy
                 throw new Error('Must have valid Email.');
             }
 
-            const userValid = USER_REGEX.test(user)
-            console.log(userValid)
+            const userValid = USER_REGEX.test(user);
             if (!userValid) throw new Error('UserName must be 5-30 characters and not start with a number.');
 
             const passStrong = PWD_REGEX.test(password);
@@ -45,11 +44,9 @@ export default function makeRegisterUser(addUser: any, addRefresh: any, getAppBy
             const app = await getAppByName({ appName });
             if (!app) return { statusCode: 401, body: 'Application is not in Universe.' };
 
-            console.log(app)
-
             const accessToken = jwt.sign(
                 {
-                    aud: app._id,
+                    aud: app.appId,
                     sub: result.data,
                     user: user,
                     roles: roles
@@ -60,11 +57,10 @@ export default function makeRegisterUser(addUser: any, addRefresh: any, getAppBy
             let newToken = await addRefresh({ userId: result.data });
             let existingToken = newToken.token;
 
-            console.log(existingToken);
             const refreshToken = jwt.sign(
                 {
-                    aud: existingToken._id,
-                    sub: existingToken.userId,
+                    aud: existingToken.refreshId,
+                    sub: existingToken.userId
                 },
                 process.env.JWT_REFRESH_SECRET as string
             );

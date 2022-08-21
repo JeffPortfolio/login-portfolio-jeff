@@ -5,7 +5,7 @@ export default function makeAddRoleAssign({ assignRoleDb }: { assignRoleDb: any 
         const newRole = makeRoleAssign(roleInfo);
 
         const success = await assignRoleDb.insert({
-            _id: newRole.getId(),
+            assignId: newRole.getAssignId(),
             userId: newRole.getUserId()
         });
 

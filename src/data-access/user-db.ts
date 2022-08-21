@@ -25,7 +25,7 @@ export default function makeUsersDb({ makeDb }: { makeDb: any }) {
 
     async function findById(userId: string) {
         const db = await makeDb();
-        const query = { _id: userId };
+        const query = { userId };
         const result = await db.collection('users').find(query).toArray();
 
         return result[0];

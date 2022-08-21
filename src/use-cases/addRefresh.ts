@@ -4,10 +4,8 @@ export default function makeAddRefresh({ refreshDb }: { refreshDb: any }) {
     return async function addRefresh(refreshInfo: any) {
         const newRefresh = makeRefreshToken(refreshInfo);
 
-        console.log(refreshInfo);
-        console.log(newRefresh);
         const success = refreshDb.insert({
-            _id: newRefresh.getId(),
+            refreshId: newRefresh.getRefreshId(),
             userId: newRefresh.getUserId(),
             expiration: newRefresh.getExpiration(),
             hash: newRefresh.getHash(),
@@ -15,9 +13,8 @@ export default function makeAddRefresh({ refreshDb }: { refreshDb: any }) {
         });
 
         if (success) {
-            // const refreshToken = await refreshDb.findByUser( newRefresh.getId() )
             const newToken = {
-                _id: newRefresh.getId(),
+                refreshId: newRefresh.getRefreshId(),
                 userId: newRefresh.getUserId(),
                 expiration: newRefresh.getExpiration(),
                 hash: newRefresh.getHash()
@@ -26,8 +23,5 @@ export default function makeAddRefresh({ refreshDb }: { refreshDb: any }) {
         } else {
             return { status: 'error', message: 'Error on insert.' };
         }
-
-        // const user = await usersDb.findByEmail(email)
-        // return newUser
     };
 }

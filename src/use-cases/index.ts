@@ -22,6 +22,8 @@ import makeGetUser from './getUser';
 import makeGetRefreshByUser from './getRefreshByUser';
 import makeExpireRefreshByUser from './expireRefreshByUser';
 import makeExpireRefreshById from './expireRefreshById';
+import makeGetRolesByAppId from './getRolesByAppId';
+import makeGetRoleAssignsByUserRoleId from './getRoleAssignsByUserRoleIds';
 
 const addUser = makeAddUser({ userDb });
 const addApp = makeAddApp({ applicationDb });
@@ -45,6 +47,8 @@ const getUser = makeGetUser({ userDb });
 const getRefreshByUser = makeGetRefreshByUser({ refreshDb });
 const expireRefreshByUser = makeExpireRefreshByUser({ refreshDb });
 const expireRefreshById = makeExpireRefreshById({ refreshDb });
+const getRolesByAppId = makeGetRolesByAppId({ roleDb });
+const getRoleAssignsByUserRoleId = makeGetRoleAssignsByUserRoleId({ assignRoleDb });
 
 const usersService = Object.freeze({
     addUser,
@@ -65,7 +69,9 @@ const usersService = Object.freeze({
     getUser,
     getRefreshByUser,
     expireRefreshByUser,
-    expireRefreshById
+    expireRefreshById,
+    getRolesByAppId,
+    getRoleAssignsByUserRoleId
 });
 
 export default usersService;
@@ -88,5 +94,7 @@ export {
     getUser,
     getRefreshByUser,
     expireRefreshByUser,
-    expireRefreshById
+    expireRefreshById,
+    getRolesByAppId,
+    getRoleAssignsByUserRoleId
 };

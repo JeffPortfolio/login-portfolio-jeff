@@ -13,11 +13,10 @@ export default function makeAppDb({ makeDb }: { makeDb: any }) {
         return result[0];
     }
 
-    async function findById(id: string) {
-        // console.log(userId)
+    async function findById(appId: string) {
         const db = await makeDb();
-        const query = { _id: id };
-        const result = await db.collection('applications').find(query).toArray();
+        // const query = { _id: id };
+        const result = await db.collection('applications').find(appId).toArray();
 
         return result[0];
     }

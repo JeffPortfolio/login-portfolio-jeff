@@ -5,7 +5,7 @@ export default function makeAddRole({ roleDb }: { roleDb: any }) {
         const newRole = makeRole(roleInfo);
 
         const success = await roleDb.insert({
-            _id: newRole.getId(),
+            roleId: newRole.getRoleId(),
             appId: newRole.getAppId,
             roleName: newRole.getRoleName()
         });

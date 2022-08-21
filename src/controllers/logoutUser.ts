@@ -4,8 +4,6 @@ export default function makeLogoutUser() {
             'Content-Type': 'application/json'
         };
         try {
-            console.log('process.env.JWT_SECRET');
-
             return {
                 statusCode: 200,
                 body: 'User Logged Out',

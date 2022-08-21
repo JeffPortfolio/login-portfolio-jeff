@@ -7,35 +7,22 @@ export default function makeUserLoggedIn() {
                 'Content-Type': 'application/json'
             };
 
-            // const appName = httpRequest.app;
-            // console.log(appName);
-
             const accessToken = httpRequest.accessToken;
-            // if (!accessToken && httpRequest.refreshToken) return { statusCode: 200, body: 'Refresh' };
-            // if (!accessToken && !httpRequest.refreshToken) return { statusCode: 200, body: 'No Token' };
             if (!accessToken) return { statusCode: 403, body: 'No Token' };
 
             const parts = accessToken.split('.');
-            // console.log(`accessToken: ${accessToken}`);
             const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-            // const appName = payload['appName'];
-            console.log(payload);
 
-            // const application = await getAppByName(appName);
-            // console.log(application);
-
-            // let verRoles = [];
+            let userRoles = [];
             let userCode = 0;
             let user = '';
             try {
                 const verifiedToken = jwt.verify(accessToken, process.env.JWT_APP_SECRET as string);
 
-                console.log(verifiedToken);
                 const parts = accessToken.split('.');
                 const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-                // console.log(payload);
                 user = payload['user'];
-                // verRoles = payload['roles'];
+                userRoles = payload['roles'];
                 userCode = payload['iat'];
             } catch (error) {
                 return { statusCode: 403, body: 'No Valid Token' };

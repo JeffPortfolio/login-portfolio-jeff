@@ -1,11 +1,11 @@
 export default function buildMakeRole() {
-    return function makeRole({ id, appId, roleName }: { id: number; appId: string; roleName: string }) {
-        if (id < 1000 || id > 9999 || id === 1971) {
+    return function makeRole({ roleId, appId, roleName }: { roleId: number; appId: string; roleName: string }) {
+        if (roleId < 1000 || roleId > 9999 || roleId === 1971) {
             throw new Error('Role must be 1000 and 9999');
         }
 
         return Object.freeze({
-            getId: () => id,
+            getRoleId: () => roleId,
             getAppId: () => appId,
             getRoleName: () => roleName
         });

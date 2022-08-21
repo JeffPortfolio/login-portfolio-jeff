@@ -1,10 +1,10 @@
 export default function buildMakeRoleAssign({ nanoid }: { nanoid: any }) {
-    return function makeRoleAssign({ id, roleId, userId }: { id?: string; roleId: number; userId: string }) {
-        id = nanoid();
+    return function makeRoleAssign({ assignId, appId, userId }: { assignId?: string; appId: number; userId: string }) {
+        assignId = nanoid();
 
         return Object.freeze({
-            getId: () => id,
-            getRoleId: () => roleId,
+            getAssignId: () => assignId,
+            getRoleId: () => appId,
             getUserId: () => userId
         });
     };

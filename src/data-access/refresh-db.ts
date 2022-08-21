@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb';
 
 export default function makeRefreshDb({ makeDb }: { makeDb: any }) {
     return Object.freeze({
@@ -13,14 +13,14 @@ export default function makeRefreshDb({ makeDb }: { makeDb: any }) {
         const db = await makeDb();
         const result = await db
             .collection('refresh')
-            .find({$and: [{expired:false}, {userId}]})
+            .find({ $and: [{ expired: false }, { userId }] })
             .toArray();
         return result[0];
     }
 
     async function findById(id: string) {
         const db = await makeDb();
-        const query = { _id: id, expired: false };
+        const query = { refreshId: id, expired: false };
         const result = await db.collection('refresh').find(query).toArray();
 
         return result[0];

@@ -1,5 +1,6 @@
 export default function makeAssignRoleDb({ makeDb }: { makeDb: any }) {
     return Object.freeze({
+        findByUserRoleIds,
         findById,
         findByAppId,
         findByUserId,
@@ -7,6 +8,14 @@ export default function makeAssignRoleDb({ makeDb }: { makeDb: any }) {
         list
     });
 
+    async function findByUserRoleIds(userId: string, roles: any[]) {
+        const db = await makeDb();
+        const query = { userId, roleId: { $in: roles } };
+        // const projection = { _id: 0, roleId: 1, userId: 0 };
+        const result = await db.collection('assignRole').find(query).toArray();
+
+        return result;
+    }
     async function findById(id: string) {
         const db = await makeDb();
         const query = { _id: { $eq: id } };

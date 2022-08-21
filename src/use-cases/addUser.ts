@@ -13,19 +13,17 @@ export default function makeAddUser({ userDb }: { userDb: any }) {
         }
 
         const success = userDb.insert({
-            _id: newUser.getId(),
+            userId: newUser.getUserId(),
             email: newUser.getEmail(),
             passwordHash: newUser.getPassword(),
             userName: newUser.getUser()
         });
 
         if (success) {
-            return { status: 'success', message: 'User registered', data: newUser.getId() };
+            return { status: 'success', message: 'User registered', data: newUser.getUserId() };
         } else {
             return { status: 'error', message: 'Error on insert.' };
         }
 
-        // const user = await usersDb.findByEmail(email)
-        // return newUser
     };
 }

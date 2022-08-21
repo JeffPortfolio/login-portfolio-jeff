@@ -14,9 +14,11 @@ app.use(helmet());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+let testCors = process.env.CORS_URL as string;
+let urlList = testCors.split(',');
 app.use(
     cors({
-        origin: ['http://localhost:3000'],
+        origin: urlList,
         credentials: true
     })
 );
@@ -29,8 +31,8 @@ app.post('/api/refreshToken', makeCallback(refreshToken));
 
 // Application APIs
 app.get('/api/loggedIn', makeCallback(userLoggedIn));
-// app.post('/api/addApplication', makeCallback(registerApplication));
-// app.get('/api/allApplications', makeCallback(allApplications));
+app.post('/api/addApplication', makeCallback(registerApplication));
+app.get('/api/allApplications', makeCallback(allApplications));
 // app.get('/api/allUsers', makeCallback(allUsers));
 // // app.post('/api/addRole', makeCallback(registerRole));
 app.get('/', (req, res) => {
