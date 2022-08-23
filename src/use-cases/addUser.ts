@@ -24,6 +24,5 @@ export default function makeAddUser({ userDb }: { userDb: any }) {
         } else {
             return { status: 'error', message: 'Error on insert.' };
         }
-
     };
 }

@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import makeCallback from './express-callback';
 import { registerApplication, allApplications, registerUser, userLoggedIn, allUsers, loginUser, refreshToken, logoutUser } from './controllers';
-// import { loginUser, userLoggedIn, registerUser, logoutUser, registerProject, registerRole, refreshToken } from './controllers';
 
 const app = express();
 dotenv.config();
@@ -16,6 +15,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 let testCors = process.env.CORS_URL as string;
 let urlList = testCors.split(',');
+
 app.use(
     cors({
         origin: urlList,

@@ -23,6 +23,6 @@ COPY package-lock.json .
 
 RUN npm ci --only=production
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/build ./build
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "build/server.js"]
