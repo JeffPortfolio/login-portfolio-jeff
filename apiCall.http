@@ -1,0 +1,34 @@
+POST  http://localhost:4000/api/addApplication
+Content-Type: application/json
+
+{
+    "appName": "Universe Commander",
+    "description": "Used to edit configuration for AAAS server",
+    "owner": "test@test.com"
+}
+
+###
+
+GET http://localhost:4000/api/allApplications
+
+###
+
+GET http://localhost:3500/api/allUsers
+
+###
+
+POST http://localhost:3500/api/registerUser
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "P@ssword1",
+    "passwordVerify": "P@ssword1",
+    "appId": "YUBLDHWR_lztoN_EBw0ys"
+}
+
+###
+
+GET http://localhost:3500/api/loggedIn
+
+###
