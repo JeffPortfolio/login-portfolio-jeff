@@ -39,6 +39,6 @@ app.get('/', (req, res) => {
     res.json('Host id running');
 });
 
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => console.log(`Server started on port: ${PORT}`));

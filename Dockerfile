@@ -25,6 +25,4 @@ RUN npm ci --only=production
 
 COPY --from=development /usr/src/app/build ./build
 
-EXPOSE 8080
-
 CMD ["node", "build/server.js"]
