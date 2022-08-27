@@ -15,7 +15,6 @@ FROM node:16-alpine as prod
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
-ENV PORT=4000
 
 WORKDIR /user/src/app
 
