@@ -36,7 +36,7 @@ app.get('/api/allApplications', makeCallback(allApplications));
 // app.get('/api/allUsers', makeCallback(allUsers));
 // // app.post('/api/addRole', makeCallback(registerRole));
 app.get('/', (req, res) => {
-    res.json('Host id running');
+    res.json(`Host id running on ${PORT}`);
 });
 
 const PORT = process.env.PORT || 8080;
